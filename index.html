@@ -2,31 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Two-Step Equations Practice – Mr. McLean Math</title>
+  <title>Area and Perimeter of Polygons – Mr. McLean Math</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
       --bg: #f5f5f5;
-      --bg-alt: #ffffff;
-      --text: #222222;
-      --accent: #1976d2;
-      --accent-soft: #e3f2fd;
-      --correct: #2e7d32;
-      --incorrect: #c62828;
-      --border: #cccccc;
-      --panel: #fafafa;
+      --fg: #222;
+      --accent: #2b7cff;
+      --accent-soft: #e2ecff;
+      --error: #c62828;
+      --success: #2e7d32;
+      --panel: #ffffff;
     }
-
     body.high-contrast {
-      --bg: #000000;
-      --bg-alt: #111111;
-      --text: #ffffff;
-      --accent: #ffcc00;
-      --accent-soft: #333333;
-      --correct: #00e676;
-      --incorrect: #ff5252;
-      --border: #666666;
-      --panel: #222222;
+      --bg: #000;
+      --fg: #fff;
+      --accent: #ff9800;
+      --accent-soft: #333;
+      --panel: #111;
     }
 
     * {
@@ -37,7 +30,7 @@
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
-      color: var(--text);
+      color: var(--fg);
     }
 
     .container {
@@ -48,1539 +41,1146 @@
 
     h1 {
       text-align: center;
-      margin-bottom: 8px;
-      font-size: 2rem;
+      margin-bottom: 12px;
+      font-size: 1.8rem;
     }
 
-    h2 {
-      margin-top: 0;
-    }
-
-    .subheading {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-      opacity: 0.8;
-    }
-
-    .top-bar {
+    .top-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-
-    .mode-toggle,
-    .difficulty-toggle,
-    .timer-controls,
-    .toggles-group {
-      display: flex;
-      align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .mode-btn,
-    .difficulty-btn,
-    .small-btn {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px 12px;
-      background: var(--bg-alt);
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.15s, transform 0.05s, border-color 0.15s;
-    }
-
-    .mode-btn.active,
-    .difficulty-btn.active {
-      background: var(--accent-soft);
-      border-color: var(--accent);
-      font-weight: 600;
-    }
-
-    .mode-btn:hover,
-    .difficulty-btn:hover,
-    .small-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .toggle-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .toggle-label input {
-      cursor: pointer;
-    }
-
-    .main-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    @media (max-width: 900px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: var(--bg-alt);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-      border: 1px solid var(--border);
-    }
-
-    .equation-display {
-      min-height: 80px;
-      display: flex;
-      align-items: center;
       justify-content: center;
-      font-size: 2rem;
-      text-align: center;
-      padding: 12px;
-      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .control-group {
       background: var(--panel);
-      margin-bottom: 16px;
-    }
-
-    .equation-display .variable {
-      font-weight: 700;
-    }
-
-    .fraction {
-      display: inline-block;
-      text-align: center;
-      vertical-align: middle;
-      margin: 0 2px;
-    }
-
-    .fraction .numerator {
-      display: block;
-      padding: 0 3px;
-    }
-
-    .fraction .denominator {
-      display: block;
-      padding: 0 3px;
-      border-top: 2px solid var(--text);
-    }
-
-    .input-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .input-row label {
-      font-size: 1rem;
-      font-weight: 500;
-    }
-
-    .answer-input {
-      font-size: 1.4rem;
-      padding: 6px 10px;
       border-radius: 8px;
-      border: 1px solid var(--border);
-      min-width: 120px;
-      max-width: 180px;
+      padding: 6px 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
     }
 
-    .answer-input:focus {
-      outline: 2px solid var(--accent);
-      outline-offset: 1px;
+    select, input[type="checkbox"] {
+      font-size: 0.9rem;
     }
 
-    .primary-btn,
-    .secondary-btn {
-      font-size: 1rem;
-      padding: 8px 18px;
+    .modes-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 8px 0 16px;
+    }
+
+    .tab-btn {
+      padding: 6px 14px;
       border-radius: 999px;
       border: none;
       cursor: pointer;
-      transition: background 0.15s, transform 0.05s;
+      background: #ddd;
+      font-weight: 600;
     }
-
-    .primary-btn {
+    .tab-btn.active {
       background: var(--accent);
-      color: #ffffff;
+      color: #fff;
     }
 
-    .primary-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .primary-btn:disabled {
-      opacity: 0.5;
-      cursor: default;
-      transform: none;
-    }
-
-    .secondary-btn {
-      background: var(--panel);
-      border: 1px solid var(--border);
-    }
-
-    .secondary-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .feedback {
-      margin-top: 8px;
-      min-height: 40px;
+    .main-layout {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    #diagramContainer {
+      flex: 1 1 320px;
+      min-width: 280px;
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+
+    #diagramContainer svg {
+      width: 100%;
+      height: auto;
+      max-height: 320px;
+      display: block;
+    }
+
+    #questionPanel {
+      flex: 1 1 320px;
+      min-width: 280px;
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
       gap: 8px;
-      font-size: 1rem;
     }
 
-    .feedback.correct {
-      color: var(--correct);
+    #promptText {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
     }
 
-    .feedback.incorrect {
-      color: var(--incorrect);
-    }
-
-    .feedback-icon {
-      font-size: 1.4rem;
-    }
-
-    .steps {
-      margin-top: 8px;
-      padding: 8px;
-      background: var(--panel);
+    #answerInput {
+      font-size: 1.2rem;
+      padding: 8px 10px;
       border-radius: 8px;
+      border: 1px solid #aaa;
+      width: 100%;
+    }
+
+    .buttons-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-size: 1rem;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #submitBtn {
+      background: var(--accent);
+      color: #fff;
+    }
+    #nextBtn {
+      background: #bbb;
+      color: #000;
+    }
+    #nextBtn.enabled {
+      background: #4caf50;
+      color: #fff;
+    }
+
+    #feedbackPanel {
+      margin-top: 6px;
+      min-height: 40px;
       font-size: 0.95rem;
-      max-height: 220px;
-      overflow-y: auto;
+      border-radius: 8px;
+      padding: 6px 8px;
+      background: var(--accent-soft);
     }
 
-    .steps-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .timer-display {
-      font-size: 0.9rem;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: var(--panel);
-      min-width: 70px;
-      text-align: center;
-    }
-
-    .summary-item {
-      font-size: 0.9rem;
-      margin-bottom: 4px;
-    }
-
-    .summary-stat {
+    #feedbackText.success {
+      color: var(--success);
       font-weight: 600;
     }
 
-    .incorrect-list {
-      margin-top: 8px;
+    #feedbackText.error {
+      color: var(--error);
+      font-weight: 600;
+    }
+
+    #showStepsBtn {
+      background: transparent;
+      color: var(--accent);
+      padding: 0;
+      border-radius: 0;
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
+
+    #stepsText {
       font-size: 0.85rem;
-      max-height: 200px;
+      margin-top: 4px;
+      white-space: pre-wrap;
+    }
+
+    #scorePanel {
+      margin-top: 12px;
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      font-size: 0.9rem;
+    }
+
+    #timerDisplay {
+      font-weight: 700;
+    }
+
+    #summaryPanel {
+      margin-top: 10px;
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+      font-size: 0.9rem;
+      max-height: 340px;
       overflow-y: auto;
-      border-top: 1px solid var(--border);
-      padding-top: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
     }
 
     .incorrect-item {
-      margin-bottom: 6px;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: var(--panel);
-      font-size: 0.75rem;
-      margin-left: 4px;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 0.85rem;
-      opacity: 0.8;
-    }
-
-    /* Worksheet mode */
-
-    .mode-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
       margin-bottom: 8px;
-      flex-wrap: wrap;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .incorrect-item:last-child {
+      border-bottom: none;
+    }
+
+    #worksheetMode {
+      display: none;
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      margin-top: 8px;
     }
 
     .worksheet-controls {
       display: flex;
-      gap: 8px;
-      align-items: center;
       flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
     }
 
-    select {
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--bg-alt);
-      font-size: 0.9rem;
-    }
-
-    .worksheet-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 900px) {
-      .worksheet-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .worksheet-block {
-      background: var(--panel);
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 0.95rem;
-      max-height: 430px;
-      overflow-y: auto;
-    }
-
-    .worksheet-title {
+    .worksheet-header {
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 1.1rem;
     }
 
     .worksheet-question {
-      margin-bottom: 16px; /* increased spacing between worksheet questions */
-    }
-
-    .answer-key-item {
+      border-bottom: 1px solid #ccc;
+      padding: 12px 0;
       margin-bottom: 6px;
     }
 
-    .pill {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--bg-alt);
-      font-size: 0.8rem;
+    .worksheet-line {
+      height: 28px;
+      border-bottom: 1px solid #555;
+      margin-top: 6px;
+      margin-right: 10%;
     }
 
-    /* Dev panel */
+    .worksheet-answer {
+      display: none;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
 
-    .dev-panel {
-      margin-top: 16px;
+    .worksheet-diagram {
+      max-width: 260px;
+      margin-bottom: 4px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.85rem;
+      margin: 16px 0 8px;
+      color: #666;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #eee;
+      font-size: 0.75rem;
+      margin-right: 4px;
+    }
+
+    #devPanel {
+      margin-top: 12px;
       padding: 8px;
       border-radius: 8px;
-      border: 1px dashed var(--border);
+      background: #212121;
+      color: #e0e0e0;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
       font-size: 0.8rem;
-      background: var(--panel);
       display: none;
-    }
-
-    .dev-panel.visible {
-      display: block;
-    }
-
-    .dev-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 6px;
-    }
-
-    .dev-log {
-      max-height: 140px;
-      overflow-y: auto;
-      background: var(--bg-alt);
-      border-radius: 6px;
-      padding: 6px;
-      border: 1px solid var(--border);
       white-space: pre-wrap;
     }
 
-    /* Accessibility */
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      border: 0;
+    @media (max-width: 720px) {
+      #diagramContainer svg {
+        max-height: 260px;
+      }
     }
-
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Two-Step Equations Practice</h1>
-    <div class="subheading">Solve for x, y, or k. Free input, three difficulty levels, and worksheet generator.</div>
+<div class="container">
+  <h1>Area and Perimeter of Polygons</h1>
 
-    <div class="top-bar" aria-label="Main controls">
-      <div class="mode-toggle" role="radiogroup" aria-label="Mode">
-        <button class="mode-btn active" data-mode="game" aria-pressed="true">🎮 Game mode</button>
-        <button class="mode-btn" data-mode="worksheet" aria-pressed="false">📄 Worksheet mode</button>
-      </div>
-
-      <div class="difficulty-toggle" role="radiogroup" aria-label="Difficulty">
-        <span>Difficulty:</span>
-        <button class="difficulty-btn active" data-diff="easy" aria-pressed="true">🟢 Easy</button>
-        <button class="difficulty-btn" data-diff="medium" aria-pressed="false">🟡 Medium</button>
-        <button class="difficulty-btn" data-diff="hard" aria-pressed="false">🔴 Hard</button>
-        <button class="difficulty-btn" data-diff="random" aria-pressed="false">🎲 Random</button>
-      </div>
-
-      <div class="timer-controls">
-        <label class="toggle-label">
-          <input type="checkbox" id="timer-toggle">
-          Timer
-        </label>
-        <select id="timer-select" aria-label="Timer duration">
-          <option value="30">30s</option>
-          <option value="60">60s</option>
-          <option value="90">90s</option>
-          <option value="120">120s</option>
-        </select>
-        <div class="timer-display" id="timer-display">Timer off</div>
-      </div>
-
-      <div class="toggles-group">
-        <label class="toggle-label">
-          <input type="checkbox" id="sound-toggle" checked>
-          Sound
-        </label>
-        <label class="toggle-label">
-          <input type="checkbox" id="contrast-toggle">
-          High contrast
-        </label>
-      </div>
+  <div class="top-controls">
+    <div class="control-group">
+      <label for="shapeSetSelect"><strong>Shapes:</strong></label>
+      <select id="shapeSetSelect">
+        <option value="both">Quadrilaterals &amp; Triangles</option>
+        <option value="quadrilaterals">Quadrilaterals only</option>
+        <option value="triangles">Triangles only</option>
+      </select>
     </div>
-
-    <div id="game-section">
-      <div class="main-grid">
-        <div class="card" aria-label="Problem and answer area">
-          <div class="equation-display" id="equation-display">
-            Press "New Question" to begin.
-          </div>
-
-          <div class="input-row">
-            <label id="answer-label" for="answer-input">Your answer:</label>
-            <input id="answer-input" class="answer-input" type="text" autocomplete="off">
-            <button id="submit-btn" class="primary-btn">Submit</button>
-            <button id="next-btn" class="secondary-btn" disabled>Next</button>
-          </div>
-          <div class="input-row" style="font-size:0.85rem; opacity:0.8;">
-            <span>Tip: Use <span class="pill">,</span> or <span class="pill">.</span> for decimals. Press <span class="pill">Enter</span> to submit, <span class="pill">Esc</span> to clear.</span>
-          </div>
-
-          <div id="feedback" class="feedback" aria-live="polite"></div>
-          <button id="show-steps-btn" class="small-btn" disabled>Show steps</button>
-          <div id="steps" class="steps" style="display:none;">
-            <div class="steps-title">Worked solution</div>
-            <div id="steps-content"></div>
-          </div>
-        </div>
-
-        <div class="card" aria-label="Session summary">
-          <h2 style="font-size:1.1rem; margin-bottom:8px;">Session summary</h2>
-          <div class="summary-item">Questions attempted: <span class="summary-stat" id="stat-attempted">0</span></div>
-          <div class="summary-item">Correct: <span class="summary-stat" id="stat-correct">0</span></div>
-          <div class="summary-item">Accuracy: <span class="summary-stat" id="stat-accuracy">0%</span></div>
-          <div class="summary-item">Score: <span class="summary-stat" id="stat-score">0</span></div>
-          <div class="summary-item">Current streak: <span class="summary-stat" id="stat-streak">0</span></div>
-          <div class="summary-item">Best streak: <span class="summary-stat" id="stat-best-streak">0</span></div>
-
-          <button id="toggle-incorrect-btn" class="small-btn" style="margin-top:8px;">Show incorrect questions</button>
-          <div id="incorrect-list" class="incorrect-list" style="display:none;"></div>
-        </div>
-      </div>
+    <div class="control-group">
+      <label for="skillSelect"><strong>Skill:</strong></label>
+      <select id="skillSelect">
+        <option value="perimeter">Perimeter</option>
+        <option value="area">Area</option>
+        <option value="mixed">Mixed</option>
+      </select>
     </div>
-
-    <div id="worksheet-section" style="display:none;">
-      <div class="card">
-        <div class="mode-header">
-          <h2 style="font-size:1.1rem;">Worksheet generator</h2>
-          <div class="worksheet-controls">
-            <label>Difficulty:
-              <select id="ws-diff">
-                <option value="easy">🟢 Easy</option>
-                <option value="medium">🟡 Medium</option>
-                <option value="hard">🔴 Hard</option>
-                <option value="random">🎲 Random</option>
-              </select>
-            </label>
-            <label>Questions:
-              <select id="ws-count">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-              </select>
-            </label>
-            <button id="ws-generate-btn" class="primary-btn">Generate worksheet</button>
-          </div>
-        </div>
-        <div class="worksheet-grid">
-          <div class="worksheet-block" aria-label="Worksheet questions">
-            <div class="worksheet-title">Questions</div>
-            <div style="font-size:0.85rem; margin-bottom:6px;">Instructions: Solve each equation. Show your working.</div>
-            <div id="ws-questions"></div>
-          </div>
-          <div class="worksheet-block" aria-label="Answer key">
-            <div class="worksheet-title">
-              Answer key
-              <span class="tag" id="ws-key-status">Hidden</span>
-            </div>
-            <div style="margin-bottom:6px;">
-              <button id="ws-show-all" class="small-btn">Reveal all</button>
-              <button id="ws-hide-all" class="small-btn">Hide all</button>
-            </div>
-            <div id="ws-answers"></div>
-          </div>
-        </div>
-      </div>
+    <div class="control-group">
+      <label><input type="checkbox" id="timerToggle"> Timer</label>
+      <select id="timerDuration">
+        <option value="30">30 s</option>
+        <option value="60" selected>60 s</option>
+        <option value="90">90 s</option>
+        <option value="120">120 s</option>
+      </select>
+      <span id="timerDisplay"></span>
     </div>
-
-    <div id="dev-panel" class="dev-panel" aria-label="Developer tests">
-      <div><strong>Developer tests (?dev=1)</strong></div>
-      <div class="dev-buttons">
-        <button class="small-btn" data-dev-test="easy100">Test 100 easy equations</button>
-        <button class="small-btn" data-dev-test="medium100">Test 100 medium equations</button>
-        <button class="small-btn" data-dev-test="hard100">Test 100 hard equations</button>
-        <button class="small-btn" data-dev-test="negatives">Check for negative solutions</button>
-        <button class="small-btn" data-dev-test="fractions">Check fraction rendering</button>
-        <button class="small-btn" data-dev-test="decimals">Check decimal parsing</button>
-        <button class="small-btn" data-dev-test="no-auto-advance">Check no auto-advance</button>
-        <button class="small-btn" data-dev-test="streak">Check streak & score</button>
-        <button class="small-btn" data-dev-test="worksheet">Check worksheet mapping</button>
-        <button class="small-btn" data-dev-test="random-mix">Check random difficulty mix</button>
-      </div>
-      <div class="dev-log" id="dev-log"></div>
+    <div class="control-group">
+      <label><input type="checkbox" id="soundToggle" checked> Sound</label>
     </div>
-
-    <div class="footer">
-      Created by Mr. McLean Math.
+    <div class="control-group">
+      <label><input type="checkbox" id="contrastToggle"> High contrast</label>
     </div>
   </div>
 
-  <script>
-    // ----------- Utility: number formatting (spaces for thousands, dot for decimal) -----------
+  <div class="modes-bar">
+    <button class="tab-btn active" id="gameTab">Game mode</button>
+    <button class="tab-btn" id="worksheetTab">Worksheet mode</button>
+  </div>
 
-    function formatNumber(num, decimalsAllowed) {
-      const negative = num < 0;
-      let value = Math.abs(num);
+  <div id="gameMode">
+    <div class="main-layout">
+      <div id="diagramContainer" aria-label="Polygon diagram">
+        <!-- SVG inserted here -->
+      </div>
+      <div id="questionPanel">
+        <div id="promptText">Loading question…</div>
+        <input id="answerInput" type="text" autocomplete="off" aria-label="Your answer">
+        <div class="buttons-row">
+          <button id="submitBtn">Submit</button>
+          <button id="nextBtn" disabled>Next</button>
+          <button id="summaryBtn" type="button">Summary</button>
+        </div>
+        <div id="feedbackPanel" aria-live="polite">
+          <div id="feedbackText"></div>
+          <button id="showStepsBtn" style="display:none;">Show steps</button>
+          <div id="stepsText"></div>
+        </div>
+      </div>
+    </div>
 
-      let useDecimals = false;
-      if (decimalsAllowed) {
-        // keep up to one decimal place if needed
-        value = Math.round(value * 10) / 10;
-        if (Math.abs(value - Math.round(value)) > 1e-9) {
-          useDecimals = true;
-        }
-      } else {
-        value = Math.round(value);
-      }
+    <div id="scorePanel">
+      <div><span class="badge">Score</span><span id="scoreValue">0</span></div>
+      <div><span class="badge">Streak</span><span id="streakValue">0</span> (Best: <span id="bestStreakValue">0</span>)</div>
+      <div><span class="badge">Attempts</span><span id="attemptsValue">0</span></div>
+      <div><span class="badge">Correct</span><span id="correctValue">0</span></div>
+      <div><span class="badge">Accuracy</span><span id="accuracyValue">0%</span></div>
+    </div>
 
-      let intPart = useDecimals ? Math.floor(value).toString() : Math.round(value).toString();
-      let decPart = "";
-      if (useDecimals) {
-        const raw = value.toFixed(1); // ensures one decimal
-        decPart = raw.split(".")[1] || "";
-      }
+    <div id="summaryPanel">
+      <strong>Session summary</strong>
+      <div id="summaryText" style="margin:6px 0;"></div>
+      <details>
+        <summary>Incorrect questions</summary>
+        <div id="incorrectList"></div>
+      </details>
+    </div>
+  </div>
 
-      // add spaces for thousands
-      let resultInt = "";
-      for (let i = 0; i < intPart.length; i++) {
-        const posFromRight = intPart.length - i - 1;
-        resultInt += intPart[i];
-        if (posFromRight > 0 && posFromRight % 3 === 0) {
-          resultInt += " ";
-        }
-      }
+  <div id="worksheetMode">
+    <div class="worksheet-header">Area and Perimeter of Polygons – Worksheet</div>
+    <div class="worksheet-controls">
+      <span>Create:</span>
+      <button class="ws-generate-btn" data-count="5">5 questions</button>
+      <button class="ws-generate-btn" data-count="10">10 questions</button>
+      <button class="ws-generate-btn" data-count="15">15 questions</button>
+      <button id="wsRevealBtn">Reveal answers</button>
+      <button id="wsHideBtn">Hide answers</button>
+    </div>
+    <div id="worksheetContainer"></div>
+  </div>
 
-      let finalStr = resultInt;
-      if (useDecimals) {
-        finalStr += "." + decPart;
-      }
+  <div id="devPanel"></div>
 
-      if (negative) finalStr = "-" + finalStr;
-      return finalStr;
+  <div class="footer">
+    Created by Mr. McLean Math.
+  </div>
+</div>
+
+<script>
+(function() {
+  // ---------- Utility functions ----------
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function randLength() {
+    // 70% integer, 30% one decimal
+    if (Math.random() < 0.7) {
+      return randInt(2, 30);
+    } else {
+      const n = randInt(20, 300); // 2.0 - 30.0
+      return n / 10;
+    }
+  }
+
+  function toNumber(value) {
+    if (typeof value === "number") return value;
+    const str = String(value).replace(/\s+/g, "").replace(",", ".");
+    const n = parseFloat(str);
+    return isNaN(n) ? null : n;
+  }
+
+  function roundTo(n, decimals) {
+    const factor = Math.pow(10, decimals);
+    return Math.round(n * factor) / factor;
+  }
+
+  function formatNumber(n) {
+    const neg = n < 0;
+    n = Math.abs(n);
+    n = roundTo(n, 2); // display up to 2 decimals
+    let str = n.toString();
+    const parts = str.split(".");
+    let intPart = parts[0];
+    const decPart = parts.length > 1 ? parts[1] : "";
+    const rgx = /(\d+)(\d{3})/;
+    while (rgx.test(intPart)) {
+      intPart = intPart.replace(rgx, "$1" + " " + "$2");
+    }
+    const joined = decPart ? intPart + "." + decPart : intPart;
+    return neg ? "-" + joined : joined;
+  }
+
+  function approxEqual(a, b, tol) {
+    return Math.abs(a - b) <= tol;
+  }
+
+  // ---------- Sound ----------
+  let audioCtx = null;
+  function beep(type) {
+    if (!document.getElementById("soundToggle").checked) return;
+    if (!window.AudioContext && !window.webkitAudioContext) return;
+    if (!audioCtx) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new Ctx();
+    }
+    const duration = type === "correct" ? 0.12 : 0.22;
+    const freq = type === "correct" ? 880 : 220;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.3, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.start(now);
+    osc.stop(now + duration + 0.02);
+  }
+
+  // ---------- Problem generation ----------
+  function chooseSkill() {
+    const skillSel = document.getElementById("skillSelect").value;
+    if (skillSel === "mixed") {
+      return Math.random() < 0.5 ? "area" : "perimeter";
+    }
+    return skillSel;
+  }
+
+  function chooseShapeType() {
+    const set = document.getElementById("shapeSetSelect").value;
+    const quads = ["square", "rectangle", "parallelogram", "rhombus"];
+    const tris  = ["rightTriangle", "isoscelesTriangle", "equilateralTriangle", "scaleneTriangle"];
+    let list;
+    if (set === "quadrilaterals") list = quads;
+    else if (set === "triangles") list = tris;
+    else list = quads.concat(tris);
+    const idx = randInt(0, list.length - 1);
+    return list[idx];
+  }
+
+  function generateProblem() {
+    const shapeType = chooseShapeType();
+    const skill = chooseSkill();
+    const params = {};
+    let correct, prompt, steps, description, shapeLabel;
+
+    function makeAreaUnit(val) {
+      return formatNumber(val) + " cm²";
+    }
+    function makePerimeterUnit(val) {
+      return formatNumber(val) + " cm";
     }
 
-    // ----------- Simple beep with Web Audio API -----------
+    if (shapeType === "square") {
+      const side = randLength();
+      params.side = side;
+      shapeLabel = "square";
+      if (skill === "area") {
+        const area = side * side;
+        correct = area;
+        prompt = "Calculate the area of the square.";
+        steps = "Formula: A = side × side\nA = " + side + " × " + side + " = " + makeAreaUnit(area);
+      } else {
+        const per = 4 * side;
+        correct = per;
+        prompt = "Calculate the perimeter of the square.";
+        steps = "Formula: P = 4 × side\nP = 4 × " + side + " = " + makePerimeterUnit(per);
+      }
+      description = "Square with side " + side + " cm.";
+    } else if (shapeType === "rectangle") {
+      let w = randLength();
+      let h = randLength();
+      params.width = w;
+      params.height = h;
+      shapeLabel = "rectangle";
+      if (skill === "area") {
+        const area = w * h;
+        correct = area;
+        prompt = "Calculate the area of the rectangle.";
+        steps = "Formula: A = length × width\nA = " + w + " × " + h + " = " + makeAreaUnit(area);
+      } else {
+        const per = 2 * (w + h);
+        correct = per;
+        prompt = "Calculate the perimeter of the rectangle.";
+        steps = "Formula: P = 2 × (length + width)\nP = 2 × (" + w + " + " + h + ") = " + makePerimeterUnit(per);
+      }
+      description = "Rectangle with sides " + w + " cm and " + h + " cm.";
+    } else if (shapeType === "parallelogram") {
+      const base = randLength();
+      const side = randLength();
+      const heightVal = randLength();
+      params.base = base;
+      params.side = side;
+      params.height = heightVal;
+      shapeLabel = "parallelogram";
+      if (skill === "area") {
+        const area = base * heightVal;
+        correct = area;
+        prompt = "Calculate the area of the parallelogram.";
+        steps = "Formula: A = base × height\nA = " + base + " × " + heightVal + " = " + makeAreaUnit(area);
+      } else {
+        const per = 2 * (base + side);
+        correct = per;
+        prompt = "Calculate the perimeter of the parallelogram.";
+        steps = "Formula: P = 2 × (base + side)\nP = 2 × (" + base + " + " + side + ") = " + makePerimeterUnit(per);
+      }
+      description = "Parallelogram with base " + base + " cm, side " + side + " cm and height " + heightVal + " cm.";
+    } else if (shapeType === "rhombus") {
+      const side = randLength();
+      const heightVal = randLength();
+      params.side = side;
+      params.height = heightVal;
+      shapeLabel = "rhombus";
+      if (skill === "area") {
+        const area = side * heightVal;
+        correct = area;
+        prompt = "Calculate the area of the rhombus.";
+        steps = "Formula: A = base × height\nA = " + side + " × " + heightVal + " = " + makeAreaUnit(area);
+      } else {
+        const per = 4 * side;
+        correct = per;
+        prompt = "Calculate the perimeter of the rhombus.";
+        steps = "Formula: P = 4 × side\nP = 4 × " + side + " = " + makePerimeterUnit(per);
+      }
+      description = "Rhombus with side " + side + " cm and height " + heightVal + " cm.";
+    } else if (shapeType === "rightTriangle") {
+      const leg1 = randLength();
+      const leg2 = randLength();
+      const hyp = randLength();
+      params.leg1 = leg1;
+      params.leg2 = leg2;
+      params.hyp = hyp;
+      shapeLabel = "right-angled triangle";
+      if (skill === "area") {
+        const area = leg1 * leg2 / 2;
+        correct = area;
+        prompt = "Calculate the area of the right-angled triangle.";
+        steps = "Formula: A = base × height ÷ 2\nHere base and height are the two legs.\nA = " +
+          leg1 + " × " + leg2 + " ÷ 2 = " + makeAreaUnit(area);
+      } else {
+        const per = leg1 + leg2 + hyp;
+        correct = per;
+        prompt = "Calculate the perimeter of the right-angled triangle.";
+        steps = "Formula: P = a + b + c\nP = " + leg1 + " + " + leg2 + " + " +
+          hyp + " = " + makePerimeterUnit(per);
+      }
+      description = "Right-angled triangle with legs " + leg1 + " cm, " + leg2 + " cm and third side " + hyp + " cm.";
+    } else if (shapeType === "isoscelesTriangle") {
+      const equal = randLength();
+      const base = randLength();
+      const heightVal = randLength();
+      params.equal = equal;
+      params.base = base;
+      params.height = heightVal;
+      shapeLabel = "isosceles triangle";
+      if (skill === "area") {
+        const area = base * heightVal / 2;
+        correct = area;
+        prompt = "Calculate the area of the isosceles triangle.";
+        steps = "Formula: A = base × height ÷ 2\nA = " + base + " × " + heightVal +
+          " ÷ 2 = " + makeAreaUnit(area);
+      } else {
+        const per = 2 * equal + base;
+        correct = per;
+        prompt = "Calculate the perimeter of the isosceles triangle.";
+        steps = "Formula: P = a + a + b\nP = " + equal + " + " + equal + " + " +
+          base + " = " + makePerimeterUnit(per);
+      }
+      description = "Isosceles triangle with equal sides " + equal + " cm, base " +
+        base + " cm and height " + heightVal + " cm.";
+    } else if (shapeType === "equilateralTriangle") {
+      const side = randLength();
+      const heightVal = randLength();
+      params.side = side;
+      params.height = heightVal;
+      shapeLabel = "equilateral triangle";
+      if (skill === "area") {
+        const area = side * heightVal / 2;
+        correct = area;
+        prompt = "Calculate the area of the equilateral triangle.";
+        steps = "Formula: A = base × height ÷ 2\nA = " + side + " × " + heightVal +
+          " ÷ 2 = " + makeAreaUnit(area);
+      } else {
+        const per = 3 * side;
+        correct = per;
+        prompt = "Calculate the perimeter of the equilateral triangle.";
+        steps = "Formula: P = 3 × side\nP = 3 × " + side + " = " + makePerimeterUnit(per);
+      }
+      description = "Equilateral triangle with side " + side + " cm and height " + heightVal + " cm.";
+    } else if (shapeType === "scaleneTriangle") {
+      const base = randLength();
+      const side1 = randLength();
+      const side2 = randLength();
+      const heightVal = randLength();
+      const obtuse = Math.random() < 0.4; // some scalene triangles are obtuse with external height
+      params.base = base;
+      params.side1 = side1;
+      params.side2 = side2;
+      params.height = heightVal;
+      params.obtuse = obtuse;
+      shapeLabel = "triangle";
+      if (skill === "area") {
+        const area = base * heightVal / 2;
+        correct = area;
+        prompt = "Calculate the area of the triangle.";
+        steps = "Formula: A = base × height ÷ 2\nA = " + base + " × " + heightVal +
+          " ÷ 2 = " + makeAreaUnit(area);
+      } else {
+        const per = base + side1 + side2;
+        correct = per;
+        prompt = "Calculate the perimeter of the triangle.";
+        steps = "Formula: P = a + b + c\nP = " + base + " + " + side1 + " + " +
+          side2 + " = " + makePerimeterUnit(per);
+      }
+      description = (obtuse ? "Obtuse " : "Scalene ") + "triangle with sides " + base + " cm, " +
+        side1 + " cm, " + side2 + " cm and height " + heightVal + " cm.";
+    }
 
-    let audioContext = null;
-    function playBeep(frequency) {
-      if (!soundEnabled) return;
+    return {
+      shapeType,
+      shapeLabel,
+      skill,
+      params,
+      correctAnswer: roundTo(correct, 2),
+      prompt,
+      steps,
+      description
+    };
+  }
+
+  // ---------- SVG drawing ----------
+  function buildSVG(problem, small) {
+    const p = problem.params;
+    const labelSize = small ? 9 : 11;
+    const width = 320;
+    const height = 220;
+    const stroke = "#000";
+    const fill = problem.skill === "area" ? "#c5e1a5" : "#b3e5fc";
+
+    function txt(x, y, text) {
+      return '<text x="'+x+'" y="'+y+'" font-size="'+labelSize+'" fill="#000">'+text+'</text>';
+    }
+    function cm(val) {
+      return formatNumber(val) + " cm";
+    }
+
+    let polygon = "";
+    let labels = "";
+    let extras = "";
+
+    switch (problem.shapeType) {
+      case "square":
+        polygon = '<rect x="70" y="40" width="160" height="160" rx="4" ry="4" ' +
+          'fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+        labels += txt(140, 32, cm(p.side));
+        labels += txt(140, 220, cm(p.side));
+        labels += txt(50, 130, cm(p.side));
+        labels += txt(240, 130, cm(p.side));
+        break;
+
+      case "rectangle":
+        polygon = '<rect x="50" y="60" width="200" height="120" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+        labels += txt(150, 52, cm(p.width));
+        labels += txt(150, 210, cm(p.width));
+        labels += txt(30, 130, cm(p.height));
+        labels += txt(260, 130, cm(p.height));
+        break;
+
+      case "parallelogram":
+        // Base horizontal, top parallel, height vertical
+        polygon = '<polygon points="70,180 250,180 290,80 110,80" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+        labels += txt(160, 200, cm(p.base));
+        labels += txt(50, 135, cm(p.side));
+        extras += '<line x1="110" y1="80" x2="110" y2="180" stroke="'+stroke+'" stroke-dasharray="4,3" stroke-width="1.5"/>';
+        extras += '<rect x="110" y="170" width="10" height="10" fill="none" stroke="'+stroke+'" stroke-width="1"/>';
+        labels += txt(122, 140, cm(p.height));
+        break;
+
+      case "rhombus":
+        // Rhombus styled like a parallelogram but narrower
+        polygon = '<polygon points="110,190 230,190 260,100 140,100" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+        // side label along left slanted side
+        labels += txt(90, 150, cm(p.side));
+        // vertical height line from top edge to base
+        extras += '<line x1="140" y1="100" x2="140" y2="190" stroke="'+stroke+'" stroke-dasharray="4,3" stroke-width="1.5"/>';
+        extras += '<rect x="140" y="180" width="10" height="10" fill="none" stroke="'+stroke+'" stroke-width="1"/>';
+        // height label just to the right of the dashed line
+        labels += txt(154, 145, cm(p.height));
+        break;
+
+      case "rightTriangle":
+        polygon = '<polygon points="70,200 260,200 70,60" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+        labels += txt(165, 215, cm(p.leg1));
+        labels += txt(48, 135, cm(p.leg2));
+        labels += txt(185, 120, cm(p.hyp));
+        extras += '<rect x="70" y="190" width="10" height="10" fill="none" stroke="'+stroke+'" stroke-width="1"/>';
+        break;
+
+      case "isoscelesTriangle":
+        polygon = '<polygon points="160,50 70,200 250,200" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+        labels += txt(52, 135, cm(p.equal));
+        labels += txt(240, 135, cm(p.equal));
+        labels += txt(150, 215, cm(p.base));
+        extras += '<line x1="160" y1="50" x2="160" y2="200" stroke="'+stroke+'" stroke-dasharray="4,3" stroke-width="1.5"/>';
+        extras += '<rect x="160" y="190" width="10" height="10" fill="none" stroke="'+stroke+'" stroke-width="1"/>';
+        labels += txt(172, 135, cm(p.height));
+        break;
+
+      case "equilateralTriangle":
+        polygon = '<polygon points="160,40 60,200 260,200" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+        labels += txt(110, 215, cm(p.side));
+        labels += txt(46, 135, cm(p.side));
+        labels += txt(238, 135, cm(p.side));
+        extras += '<line x1="160" y1="40" x2="160" y2="200" stroke="'+stroke+'" stroke-dasharray="4,3" stroke-width="1.5"/>';
+        extras += '<rect x="160" y="190" width="10" height="10" fill="none" stroke="'+stroke+'" stroke-width="1"/>';
+        labels += txt(172, 135, cm(p.height));
+        break;
+
+      case "scaleneTriangle":
+        if (p.obtuse) {
+          // Obtuse scalene: apex left, height outside triangle
+          polygon = '<polygon points="80,200 260,200 40,80" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+          labels += txt(160, 215, cm(p.base));
+          labels += txt(90, 150, cm(p.side1));
+          labels += txt(250, 150, cm(p.side2));
+          extras += '<line x1="40" y1="80" x2="40" y2="200" stroke="'+stroke+'" stroke-dasharray="4,3" stroke-width="1.5"/>';
+          extras += '<rect x="40" y="190" width="10" height="10" fill="none" stroke="'+stroke+'" stroke-width="1"/>';
+          labels += txt(10, 140, cm(p.height));
+        } else {
+          // Acute scalene: height inside triangle, vertical
+          polygon = '<polygon points="60,200 260,200 190,60" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+          labels += txt(150, 215, cm(p.base));
+          labels += txt(48, 145, cm(p.side1));
+          labels += txt(248, 145, cm(p.side2));
+          extras += '<line x1="190" y1="60" x2="190" y2="200" stroke="'+stroke+'" stroke-dasharray="4,3" stroke-width="1.5"/>';
+          extras += '<rect x="190" y="190" width="10" height="10" fill="none" stroke="'+stroke+'" stroke-width="1"/>';
+          labels += txt(202, 145, cm(p.height));
+        }
+        break;
+    }
+
+    const svg = '<svg viewBox="0 0 '+width+' '+height+'" role="img" aria-label="Polygon diagram">'+
+      '<rect x="0" y="0" width="'+width+'" height="'+height+'" fill="#fafafa" stroke="none"/>'+ 
+      polygon + extras + labels +
+      '</svg>';
+    return svg;
+  }
+
+  // ---------- Game state ----------
+  const state = {
+    currentProblem: null,
+    answered: false,
+    lastCorrect: false,
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    attempts: 0,
+    correct: 0,
+    incorrectList: [],
+    timerId: null,
+    timeLeft: 0
+  };
+
+  // ---------- DOM references ----------
+  const diagramContainer = document.getElementById("diagramContainer");
+  const promptTextEl = document.getElementById("promptText");
+  const answerInput = document.getElementById("answerInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const feedbackText = document.getElementById("feedbackText");
+  const showStepsBtn = document.getElementById("showStepsBtn");
+  const stepsText = document.getElementById("stepsText");
+  const scoreValue = document.getElementById("scoreValue");
+  const streakValue = document.getElementById("streakValue");
+  const bestStreakValue = document.getElementById("bestStreakValue");
+  const attemptsValue = document.getElementById("attemptsValue");
+  const correctValue = document.getElementById("correctValue");
+  const accuracyValue = document.getElementById("accuracyValue");
+  const timerToggle = document.getElementById("timerToggle");
+  const timerDuration = document.getElementById("timerDuration");
+  const timerDisplay = document.getElementById("timerDisplay");
+  const summaryPanel = document.getElementById("summaryPanel");
+  const summaryBtn = document.getElementById("summaryBtn");
+  const summaryText = document.getElementById("summaryText");
+  const incorrectListEl = document.getElementById("incorrectList");
+  const contrastToggle = document.getElementById("contrastToggle");
+
+  const gameTab = document.getElementById("gameTab");
+  const worksheetTab = document.getElementById("worksheetTab");
+  const gameMode = document.getElementById("gameMode");
+  const worksheetMode = document.getElementById("worksheetMode");
+  const wsGenerateButtons = document.querySelectorAll(".ws-generate-btn");
+  const wsRevealBtn = document.getElementById("wsRevealBtn");
+  const wsHideBtn = document.getElementById("wsHideBtn");
+  const worksheetContainer = document.getElementById("worksheetContainer");
+  const devPanel = document.getElementById("devPanel");
+
+  // ---------- Timer ----------
+  function clearTimer() {
+    if (state.timerId) {
+      clearInterval(state.timerId);
+      state.timerId = null;
+    }
+    timerDisplay.textContent = "";
+  }
+
+  function startTimer() {
+    clearTimer();
+    if (!timerToggle.checked) return;
+    const secs = parseInt(timerDuration.value, 10) || 60;
+    state.timeLeft = secs;
+    timerDisplay.textContent = "Time: " + state.timeLeft + " s";
+    state.timerId = setInterval(() => {
+      state.timeLeft -= 1;
+      if (state.timeLeft <= 0) {
+        timerDisplay.textContent = "Time: 0 s";
+        clearTimer();
+        if (!state.answered) {
+          handleTimeout();
+        }
+      } else {
+        timerDisplay.textContent = "Time: " + state.timeLeft + " s";
+      }
+    }, 1000);
+  }
+
+  function handleTimeout() {
+    state.answered = true;
+    state.lastCorrect = false;
+    state.attempts += 1;
+    const correctVal = state.currentProblem.correctAnswer;
+    const formatted = formatNumber(correctVal);
+    feedbackText.textContent = "Time's up. The correct answer is " + formatted + ".";
+    feedbackText.className = "error";
+    stepsText.textContent = "";
+    showStepsBtn.style.display = "inline";
+    beep("wrong");
+    state.incorrectList.push({
+      description: state.currentProblem.description,
+      skill: state.currentProblem.skill,
+      correctAnswer: formatted,
+      userAnswer: "(no answer – timed out)"
+    });
+    updateScore(false);
+    enableNext();
+  }
+
+  // ---------- Game flow ----------
+  function loadNewProblem() {
+    const prob = generateProblem();
+    state.currentProblem = prob;
+    state.answered = false;
+    state.lastCorrect = false;
+    promptTextEl.textContent = prob.prompt;
+    diagramContainer.innerHTML = buildSVG(prob, false);
+    feedbackText.textContent = "";
+    feedbackText.className = "";
+    stepsText.textContent = "";
+    showStepsBtn.style.display = "none";
+    answerInput.value = "";
+    answerInput.disabled = false;
+    answerInput.focus();
+    disableNext();
+    clearTimer();
+    startTimer();
+  }
+
+  function disableNext() {
+    nextBtn.disabled = true;
+    nextBtn.classList.remove("enabled");
+  }
+
+  function enableNext() {
+    nextBtn.disabled = false;
+    nextBtn.classList.add("enabled");
+  }
+
+  function updateScore(correct) {
+    if (correct) {
+      state.score += 10;
+      state.streak += 1;
+      state.bestStreak = Math.max(state.bestStreak, state.streak);
+      state.correct += 1;
+    } else {
+      state.streak = 0;
+    }
+    const acc = state.attempts > 0 ? Math.round((state.correct / state.attempts) * 100) : 0;
+    scoreValue.textContent = state.score;
+    streakValue.textContent = state.streak;
+    bestStreakValue.textContent = state.bestStreak;
+    attemptsValue.textContent = state.attempts;
+    correctValue.textContent = state.correct;
+    accuracyValue.textContent = acc + "%";
+  }
+
+  function handleSubmit() {
+    if (state.answered) return;
+    const val = toNumber(answerInput.value);
+    if (val === null) {
+      feedbackText.textContent = "Please enter a number.";
+      feedbackText.className = "error";
+      return;
+    }
+    state.answered = true;
+    clearTimer();
+    const correctVal = state.currentProblem.correctAnswer;
+    const formattedCorrect = formatNumber(correctVal);
+    state.attempts += 1;
+
+    if (approxEqual(val, correctVal, 0.05)) {
+      state.lastCorrect = true;
+      feedbackText.textContent = "Correct!";
+      feedbackText.className = "success";
+      stepsText.textContent = "";
+      showStepsBtn.style.display = "none";
+      beep("correct");
+      updateScore(true);
+    } else {
+      state.lastCorrect = false;
+      feedbackText.textContent = "Incorrect. The correct answer is " + formattedCorrect + ".";
+      feedbackText.className = "error";
+      stepsText.textContent = "";
+      showStepsBtn.style.display = "inline";
+      beep("wrong");
+      state.incorrectList.push({
+        description: state.currentProblem.description,
+        skill: state.currentProblem.skill,
+        correctAnswer: formattedCorrect,
+        userAnswer: formatNumber(roundTo(val, 2))
+      });
+      updateScore(false);
+    }
+    enableNext();
+  }
+
+  function showSteps() {
+    if (!state.currentProblem) return;
+    stepsText.textContent = state.currentProblem.steps;
+  }
+
+  function showSummary() {
+    summaryPanel.style.display = "block";
+    const acc = state.attempts > 0 ? Math.round((state.correct / state.attempts) * 100) : 0;
+    summaryText.textContent =
+      "Questions attempted: " + state.attempts +
+      " | Correct: " + state.correct +
+      " | Accuracy: " + acc + "% | Score: " + state.score +
+      " | Best streak: " + state.bestStreak;
+
+    if (state.incorrectList.length === 0) {
+      incorrectListEl.innerHTML = "<p>No incorrect questions so far.</p>";
+    } else {
+      const parts = [];
+      state.incorrectList.forEach((item, i) => {
+        const html = '<div class="incorrect-item">'+
+          "<strong>" + (i+1) + ".</strong> " + item.description + "<br>" +
+          "Skill: " + item.skill + "<br>" +
+          "Your answer: " + item.userAnswer + "<br>" +
+          "Correct answer: " + item.correctAnswer +
+          "</div>";
+        parts.push(html);
+      });
+      incorrectListEl.innerHTML = parts.join("");
+    }
+  }
+
+  // ---------- Worksheet mode ----------
+  function buildWorksheetQuestion(idx, problem) {
+    const svg = buildSVG(problem, true).replace('<svg ', '<svg class="worksheet-diagram" ');
+    const skillWord = problem.skill === "area" ? "area" : "perimeter";
+    const qText = "Calculate the " + skillWord + " of the " + problem.shapeLabel + ".";
+    const correctVal = problem.correctAnswer;
+    const unit = problem.skill === "area" ? "cm²" : "cm";
+    const answerText = formatNumber(correctVal) + " " + unit;
+
+    return (
+      '<div class="worksheet-question">' +
+        '<div><strong>' + idx + '.</strong> ' + qText + '</div>' +
+        svg +
+        '<div class="worksheet-line"></div>' +
+        '<div class="worksheet-answer">Answer: ' + answerText + '</div>' +
+      '</div>'
+    );
+  }
+
+  function generateWorksheet(count) {
+    const parts = [];
+    for (let i = 1; i <= count; i++) {
+      const prob = generateProblem();
+      parts.push(buildWorksheetQuestion(i, prob));
+    }
+    worksheetContainer.innerHTML = parts.join("");
+  }
+
+  function worksheetReveal(show) {
+    const answers = worksheetContainer.querySelectorAll(".worksheet-answer");
+    answers.forEach(a => {
+      a.style.display = show ? "block" : "none";
+    });
+  }
+
+  // ---------- Dev tests ----------
+  function runDevTests() {
+    const results = [];
+    function test(desc, fn) {
       try {
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        const duration = 0.12;
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        osc.frequency.value = frequency;
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.12, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
-        osc.start();
-        osc.stop(audioContext.currentTime + duration);
+        const ok = fn();
+        results.push((ok ? "✔ " : "✖ ") + desc);
       } catch (e) {
-        // ignore audio errors
+        results.push("✖ " + desc + " (error: " + e.message + ")");
       }
     }
 
-    // ----------- Equation generation helpers -----------
-
-    function randomChoice(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    function randomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function randomSolutionInteger() {
-      return randomInt(-20, 20);
-    }
-
-    function randomSolutionDecimal() {
-      // choose something like -10.0 .. 10.0 step 0.1
-      const base = randomInt(-100, 100);
-      return base / 10;
-    }
-
-    function wrapWithFractionHTML(numeratorHTML, denominatorHTML) {
-      return '<span class="fraction"><span class="numerator">' + numeratorHTML +
-        '</span><span class="denominator">' + denominatorHTML + "</span></span>";
-    }
-
-    // coefficient * variable formatting
-    function formatVariable(variable) {
-      return variable;
-    }
-
-    function formatTermCoeffVar(a, variable, omitSignForPositive) {
-      const absA = Math.abs(a);
-      let coeffStr = "";
-      if (absA === 1) {
-        coeffStr = "";
-      } else {
-        coeffStr = formatNumber(absA, false);
-      }
-      if (omitSignForPositive) {
-        return coeffStr + formatVariable(variable);
-      }
-      if (a < 0) {
-        return "-" + coeffStr + formatVariable(variable);
-      } else {
-        return coeffStr + formatVariable(variable);
-      }
-    }
-
-    function formatSignedConst(b) {
-      if (b === 0) return "";
-      if (b > 0) {
-        return "+ " + formatNumber(b, false);
-      } else {
-        return "- " + formatNumber(Math.abs(b), false);
-      }
-    }
-
-    // A generated question object:
-    // {
-    //   html: "<span>...</span>",
-    //   variable: "x" | "y" | "k",
-    //   solution: number,
-    //   stepsHtml: "<div>step</div>...",
-    //   raw: { any debug info }
-    // }
-
-    // ----------- EASY: ax + b = c or x/n + b = c with c > 0 -----------
-
-    function generateEasyQuestion() {
-      const variable = randomChoice(["x", "y", "k"]);
-      const pattern = Math.random() < 0.5 ? "integer" : "fraction";
-
-      if (pattern === "integer") {
-        while (true) {
-          const a = randomInt(1, 10);
-          const sol = randomSolutionInteger();
-          const b = randomInt(-40, 40);
-          const c = a * sol + b;
-
-          // Require positive RHS and not too big
-          if (c <= 0 || Math.abs(c) > 120) continue;
-
-          const termVar = formatTermCoeffVar(a, variable);
-          const termConst = formatSignedConst(b);
-          const leftExpr = termVar + (termConst ? " " + termConst : "");
-          const rightExpr = formatNumber(c, false);
-          const eqHtml = leftExpr + " = " + rightExpr;
-
-          const steps = [];
-          steps.push(eqHtml);
-          const step2Right = c - b;
-          const signB = b >= 0 ? " - " + formatNumber(Math.abs(b), false) : " + " + formatNumber(Math.abs(b), false);
-          steps.push(formatTermCoeffVar(a, variable) + " = " + formatNumber(c, false) + signB);
-          steps.push(formatTermCoeffVar(a, variable) + " = " + formatNumber(step2Right, false));
-          steps.push(variable + " = " + formatNumber(step2Right, false) + " / " + a);
-          steps.push(variable + " = " + formatNumber(sol, false));
-
-          return {
-            html: eqHtml,
-            variable,
-            solution: sol,
-            stepsHtml: steps.join("<br>"),
-            raw: { a, b, c, pattern: "easy-integer" }
-          };
-        }
-      } else {
-        while (true) {
-          const n = randomChoice([2, 4, 5, 10]);
-          let sol;
-          while (true) {
-            const k = randomInt(-20, 20);
-            if (k === 0) continue;
-            sol = k * n;
-            break;
-          }
-          const b = randomInt(-30, 30);
-          const c = sol / n + b;
-
-          // RHS must be positive integer and not too big
-          if (c <= 0 || Math.abs(c) > 120) continue;
-          if (Math.abs(c - Math.round(c)) > 1e-9) continue;
-          const cInt = Math.round(c);
-
-          const frac = wrapWithFractionHTML(variable, n.toString());
-          const termConst = formatSignedConst(b);
-          const leftExpr = frac + (termConst ? " " + termConst : "");
-          const rightExpr = formatNumber(cInt, false);
-          const eqHtml = leftExpr + " = " + rightExpr;
-
-          const steps = [];
-          steps.push(eqHtml);
-
-          const cMinusB = cInt - b;
-          const signB = b >= 0 ? " - " + formatNumber(Math.abs(b), false) : " + " + formatNumber(Math.abs(b), false);
-          steps.push(
-            wrapWithFractionHTML(variable, n.toString()) +
-            " = " + formatNumber(cInt, false) + signB
-          );
-          steps.push(
-            wrapWithFractionHTML(variable, n.toString()) +
-            " = " + formatNumber(cMinusB, false)
-          );
-          steps.push(variable + " = " + formatNumber(cMinusB, false) + " × " + n);
-          steps.push(variable + " = " + formatNumber(sol, false));
-
-          return {
-            html: eqHtml,
-            variable,
-            solution: sol,
-            stepsHtml: steps.join("<br>"),
-            raw: { n, b, cInt, pattern: "easy-fraction" }
-          };
-        }
-      }
-    }
-
-    // ----------- MEDIUM -----------
-
-    function generateMediumQuestion() {
-      const variable = randomChoice(["x", "y", "k"]);
-      const pattern = Math.random() < 0.6 ? "like-terms" : "fraction";
-
-      if (pattern === "like-terms") {
-        // Ensure the combined coefficient is POSITIVE so we never divide by a negative
-        const sol = randomSolutionInteger();
-        let a1, a2, signSecond, combined;
-
-        do {
-          a1 = randomInt(1, 6);
-          a2 = randomInt(1, 6);
-          signSecond = Math.random() < 0.5 ? 1 : -1;
-          combined = a1 + signSecond * a2;
-        } while (combined <= 0); // reject zero or negative combined coefficient
-
-        let b = randomInt(-30, 30);
-        let c = combined * sol + b;
-        if (Math.abs(c) > 120) {
-          return generateMediumQuestion();
-        }
-
-        const term1 = formatTermCoeffVar(a1, variable);
-        const term2 = (signSecond === 1 ? " + " : " - ") +
-          formatTermCoeffVar(a2, variable, true);
-        const termConst = formatSignedConst(b);
-
-        const leftExpr = term1 + term2 + " " + termConst;
-        const rightExpr = formatNumber(c, false);
-        const eqHtml = leftExpr + " = " + rightExpr;
-
-        const steps = [];
-        steps.push(eqHtml);
-
-        const combinedTerm = formatTermCoeffVar(combined, variable);
-        steps.push(combinedTerm + " " + formatSignedConst(b) + " = " + formatNumber(c, false));
-
-        const cMinusB = c - b;
-        const signB = b >= 0 ? " - " + formatNumber(Math.abs(b), false) : " + " + formatNumber(Math.abs(b), false);
-        steps.push(combinedTerm + " = " + formatNumber(c, false) + signB);
-        steps.push(combinedTerm + " = " + formatNumber(cMinusB, false));
-        steps.push(variable + " = " + formatNumber(cMinusB, false) + " / " + combined);
-        steps.push(variable + " = " + formatNumber(sol, false));
-
-        return {
-          html: eqHtml,
-          variable,
-          solution: sol,
-          stepsHtml: steps.join("<br>"),
-          raw: { a1, a2, signSecond, b, c, combined, pattern: "medium-like-terms" }
-        };
-
-      } else {
-        const n = randomChoice([2, 4, 5, 10]);
-        let sol;
-        while (true) {
-          const k = randomInt(-24, 24);
-          if (k === 0) continue;
-          sol = k * n;
-          break;
-        }
-        const b = randomInt(-40, 40);
-        const c = sol / n + b;
-        if (Math.abs(c) > 140) {
-          return generateMediumQuestion();
-        }
-        if (Math.abs(c - Math.round(c)) > 1e-9) {
-          return generateMediumQuestion();
-        }
-        const cInt = Math.round(c);
-
-        const frac = wrapWithFractionHTML(variable, n.toString());
-        const termConst = formatSignedConst(b);
-        const leftExpr = frac + " " + termConst;
-        const rightExpr = formatNumber(cInt, false);
-        const eqHtml = leftExpr + " = " + rightExpr;
-
-        const steps = [];
-        steps.push(eqHtml);
-
-        const cMinusB = cInt - b;
-        const signB = b >= 0 ? " - " + formatNumber(Math.abs(b), false) : " + " + formatNumber(Math.abs(b), false);
-        steps.push(
-          wrapWithFractionHTML(variable, n.toString()) +
-          " = " + formatNumber(cInt, false) + signB
-        );
-        steps.push(
-          wrapWithFractionHTML(variable, n.toString()) +
-          " = " + formatNumber(cMinusB, false)
-        );
-        steps.push(variable + " = " + formatNumber(cMinusB, false) + " × " + n);
-        steps.push(variable + " = " + formatNumber(sol, false));
-
-        return {
-          html: eqHtml,
-          variable,
-          solution: sol,
-          stepsHtml: steps.join("<br>"),
-          raw: { n, b, cInt, pattern: "medium-fraction" }
-        };
-      }
-    }
-
-    // ----------- HARD -----------
-
-    function generateHardQuestion() {
-      const variable = randomChoice(["x", "y", "k"]);
-      const patternRand = Math.random();
-      let pattern;
-      if (patternRand < 0.4) pattern = "multi-like-terms";
-      else if (patternRand < 0.7) pattern = "fraction-decimal";
-      else pattern = "decimal-coeff";
-
-      if (pattern === "multi-like-terms") {
-        const sol = Math.random() < 0.5 ? randomSolutionInteger() : randomSolutionDecimal();
-        let a1 = randomInt(1, 4);
-        let a2 = randomInt(1, 4);
-        let a3 = randomInt(1, 4);
-        const sumA = a1 + a2 + a3;
-
-        let b = randomInt(-40, 40);
-        let c = sumA * sol + b;
-
-        if (Math.abs(c) > 150) {
-          return generateHardQuestion();
-        }
-
-        c = Math.round(c * 10) / 10;
-
-        const coeff1 = formatTermCoeffVar(a1, variable);
-        const coeff2 = " + " + formatTermCoeffVar(a2, variable, true);
-        const coeff3 = " + " + formatTermCoeffVar(a3, variable, true);
-        const termConst = formatSignedConst(b);
-
-        const leftExpr = coeff1 + coeff2 + coeff3 + " " + termConst;
-        const rightExpr = formatNumber(c, true);
-        const eqHtml = leftExpr + " = " + rightExpr;
-
-        const steps = [];
-        steps.push(eqHtml);
-
-        const combinedTerm = formatTermCoeffVar(sumA, variable);
-        steps.push(combinedTerm + " " + formatSignedConst(b) + " = " + formatNumber(c, true));
-
-        const cMinusB = c - b;
-        const signB = b >= 0 ? " - " + formatNumber(Math.abs(b), true) : " + " + formatNumber(Math.abs(b), true);
-        steps.push(combinedTerm + " = " + formatNumber(c, true) + signB);
-        steps.push(combinedTerm + " = " + formatNumber(cMinusB, true));
-        steps.push(variable + " = " + formatNumber(cMinusB, true) + " / " + sumA);
-        steps.push(variable + " = " + formatNumber(sol, true));
-
-        return {
-          html: eqHtml,
-          variable,
-          solution: sol,
-          stepsHtml: steps.join("<br>"),
-          raw: { a1, a2, a3, b, c, sumA, pattern: "hard-multi-like-terms" }
-        };
-
-      } else if (pattern === "fraction-decimal") {
-        const n = 10;
-        const sol = randomSolutionDecimal();
-        const d = randomChoice([0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.2, 1.5, 2.7]);
-        let leftMinus = Math.random() < 0.5;
-        const fracValue = sol / n;
-
-        if (leftMinus) {
-          const c = fracValue - d;
-          if (Math.abs(c) > 200) return generateHardQuestion();
-          const cNice = Math.round(c * 10) / 10;
-          const frac = wrapWithFractionHTML(variable, n.toString());
-          const leftExpr = frac + " - " + formatNumber(d, true);
-          const rightExpr = formatNumber(cNice, true);
-          const eqHtml = leftExpr + " = " + rightExpr;
-
-          const steps = [];
-          steps.push(eqHtml);
-          const rightPlus = cNice + d;
-          steps.push(
-            wrapWithFractionHTML(variable, n.toString()) +
-            " = " + formatNumber(cNice, true) + " + " + formatNumber(d, true)
-          );
-          steps.push(
-            wrapWithFractionHTML(variable, n.toString()) +
-            " = " + formatNumber(rightPlus, true)
-          );
-          const vVal = rightPlus * n;
-          const solRounded = Math.round(vVal * 10) / 10;
-          steps.push(variable + " = " + formatNumber(rightPlus, true) + " × " + n);
-          steps.push(variable + " = " + formatNumber(solRounded, true));
-
-          return {
-            html: eqHtml,
-            variable,
-            solution: solRounded,
-            stepsHtml: steps.join("<br>"),
-            raw: { n, d, cNice, pattern: "hard-fraction-decimal-minus" }
-          };
-        } else {
-          const c = fracValue + d;
-          if (Math.abs(c) > 200) return generateHardQuestion();
-          const cNice = Math.round(c * 10) / 10;
-          const frac = wrapWithFractionHTML(variable, n.toString());
-          const leftExpr = frac + " + " + formatNumber(d, true);
-          const rightExpr = formatNumber(cNice, true);
-          const eqHtml = leftExpr + " = " + rightExpr;
-
-          const steps = [];
-          steps.push(eqHtml);
-          const rightMinus = cNice - d;
-          steps.push(
-            wrapWithFractionHTML(variable, n.toString()) +
-            " = " + formatNumber(cNice, true) + " - " + formatNumber(d, true)
-          );
-          steps.push(
-            wrapWithFractionHTML(variable, n.toString()) +
-            " = " + formatNumber(rightMinus, true)
-          );
-          const vVal = rightMinus * n;
-          const solRounded = Math.round(vVal * 10) / 10;
-          steps.push(variable + " = " + formatNumber(rightMinus, true) + " × " + n);
-          steps.push(variable + " = " + formatNumber(solRounded, true));
-
-          return {
-            html: eqHtml,
-            variable,
-            solution: solRounded,
-            stepsHtml: steps.join("<br>"),
-            raw: { n, d, cNice, pattern: "hard-fraction-decimal-plus" }
-          };
-        }
-
-      } else {
-        const kVal = randomChoice([0.02, 0.03, 0.04, 0.05]);
-        const sol = randomSolutionInteger();
-        const constPart = randomChoice([0.4, 0.6, 0.8, 1.0]);
-        let leftVal = constPart + kVal * sol;
-        leftVal = Math.round(leftVal * 10) / 10;
-        if (Math.abs(leftVal) > 200) return generateHardQuestion();
-
-        const leftFirst = Math.random() < 0.5;
-        const leftExpr = formatNumber(leftVal, true);
-        const rightExpr = formatNumber(constPart, true) + " + " + formatNumber(kVal, true) + formatVariable(variable);
-
-        const eqHtml = leftFirst
-          ? leftExpr + " = " + rightExpr
-          : rightExpr + " = " + leftExpr;
-
-        const steps = [];
-        steps.push(eqHtml);
-
-        const step1 =
-          leftExpr + " - " + formatNumber(constPart, true) + " = " + formatNumber(kVal, true) + formatVariable(variable);
-
-        const diff = leftVal - constPart;
-        const diffNice = Math.round(diff * 10) / 10;
-
-        steps.push(step1);
-        steps.push(formatNumber(diffNice, true) + " = " + formatNumber(kVal, true) + formatVariable(variable));
-        steps.push(variable + " = " + formatNumber(diffNice, true) + " / " + formatNumber(kVal, true));
-        steps.push(variable + " = " + formatNumber(sol, true));
-
-        return {
-          html: eqHtml,
-          variable,
-          solution: sol,
-          stepsHtml: steps.join("<br>"),
-          raw: { kVal, constPart, leftVal, pattern: "hard-decimal-coeff" }
-        };
-      }
-    }
-
-    // ----------- Game state -----------
-
-    let currentDifficulty = "easy";
-    let currentMode = "game";
-    let currentQuestion = null;
-    let attempted = 0;
-    let correct = 0;
-    let score = 0;
-    let streak = 0;
-    let bestStreak = 0;
-    let incorrectQuestions = [];
-
-    let timerEnabled = false;
-    let timerDuration = 30;
-    let timerRemaining = 0;
-    let timerInterval = null;
-
-    let soundEnabled = true;
-
-    const equationDisplayEl = document.getElementById("equation-display");
-    const answerInput = document.getElementById("answer-input");
-    const submitBtn = document.getElementById("submit-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const feedbackEl = document.getElementById("feedback");
-    const stepsEl = document.getElementById("steps");
-    const stepsContentEl = document.getElementById("steps-content");
-    const showStepsBtn = document.getElementById("show-steps-btn");
-    const answerLabel = document.getElementById("answer-label");
-
-    const statAttempted = document.getElementById("stat-attempted");
-    const statCorrect = document.getElementById("stat-correct");
-    const statAccuracy = document.getElementById("stat-accuracy");
-    const statScore = document.getElementById("stat-score");
-    const statStreak = document.getElementById("stat-streak");
-    const statBestStreak = document.getElementById("stat-best-streak");
-    const incorrectListEl = document.getElementById("incorrect-list");
-    const toggleIncorrectBtn = document.getElementById("toggle-incorrect-btn");
-
-    const timerToggle = document.getElementById("timer-toggle");
-    const timerSelect = document.getElementById("timer-select");
-    const timerDisplay = document.getElementById("timer-display");
-    const soundToggle = document.getElementById("sound-toggle");
-    const contrastToggle = document.getElementById("contrast-toggle");
-
-    const gameSection = document.getElementById("game-section");
-    const worksheetSection = document.getElementById("worksheet-section");
-
-    const wsDiff = document.getElementById("ws-diff");
-    const wsCount = document.getElementById("ws-count");
-    const wsGenerateBtn = document.getElementById("ws-generate-btn");
-    const wsQuestions = document.getElementById("ws-questions");
-    const wsAnswers = document.getElementById("ws-answers");
-    const wsShowAll = document.getElementById("ws-show-all");
-    const wsHideAll = document.getElementById("ws-hide-all");
-    const wsKeyStatus = document.getElementById("ws-key-status");
-
-    const devPanel = document.getElementById("dev-panel");
-    const devLog = document.getElementById("dev-log");
-
-    // ----------- Mode and difficulty handlers -----------
-
-    document.querySelectorAll(".difficulty-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".difficulty-btn").forEach(b => {
-          b.classList.remove("active");
-          b.setAttribute("aria-pressed", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-pressed", "true");
-        currentDifficulty = btn.dataset.diff;
-        if (currentMode === "game") {
-          generateNewQuestion();
-        }
-      });
+    test("Rectangle 5 × 3 → area 15", () => 5 * 3 === 15);
+    test("Rectangle 5 × 3 → perimeter 16", () => 2 * (5 + 3) === 16);
+    test("Square side 4 → area 16", () => 4 * 4 === 16);
+    test("Square side 4 → perimeter 16", () => 4 * 4 === 16);
+    test("Parallelogram base 14, height 8 → area 112", () => 14 * 8 === 112);
+    test("Right triangle legs 3 and 4 → area 6", () => 3 * 4 / 2 === 6);
+    test("Equilateral triangle side 6 → perimeter 18", () => 3 * 6 === 18);
+    test("Rhombus side 5 → perimeter 20", () => 4 * 5 === 20);
+    test("Decimal parsing '12,5' equals '12.5'", () => toNumber("12,5") === 12.5 && toNumber("12.5") === 12.5);
+    test("Worksheet generator makes correct count", () => {
+      generateWorksheet(5);
+      const items = worksheetContainer.querySelectorAll(".worksheet-question");
+      return items.length === 5;
     });
 
-    document.querySelectorAll(".mode-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".mode-btn").forEach(b => {
-          b.classList.remove("active");
-          b.setAttribute("aria-pressed", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-pressed", "true");
-        currentMode = btn.dataset.mode;
-        if (currentMode === "game") {
-          gameSection.style.display = "";
-          worksheetSection.style.display = "none";
-          answerInput.focus();
-        } else {
-          gameSection.style.display = "none";
-          worksheetSection.style.display = "";
-        }
-      });
-    });
+    devPanel.textContent = "Developer tests (read-only)\n" + results.join("\n");
+  }
 
-    // ----------- Timer logic -----------
+  // ---------- Event listeners ----------
+  submitBtn.addEventListener("click", handleSubmit);
+  nextBtn.addEventListener("click", () => loadNewProblem());
 
-    function updateTimerDisplay() {
-      if (!timerEnabled) {
-        timerDisplay.textContent = "Timer off";
-        return;
+  answerInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      if (!state.answered) {
+        handleSubmit();
+      } else if (state.lastCorrect && !nextBtn.disabled) {
+        loadNewProblem();
       }
-      timerDisplay.textContent = timerRemaining + "s";
-    }
-
-    function startTimer() {
-      if (!timerEnabled) return;
-      clearInterval(timerInterval);
-      timerRemaining = timerDuration;
-      updateTimerDisplay();
-      timerInterval = setInterval(() => {
-        timerRemaining -= 1;
-        if (timerRemaining <= 0) {
-          timerRemaining = 0;
-          clearInterval(timerInterval);
-          updateTimerDisplay();
-          timerDisplay.textContent = "Time's up";
-        } else {
-          updateTimerDisplay();
-        }
-      }, 1000);
-    }
-
-    timerToggle.addEventListener("change", () => {
-      timerEnabled = timerToggle.checked;
-      if (!timerEnabled) {
-        clearInterval(timerInterval);
-        timerDisplay.textContent = "Timer off";
-      } else {
-        timerDuration = parseInt(timerSelect.value, 10);
-        startTimer();
-      }
-    });
-
-    timerSelect.addEventListener("change", () => {
-      timerDuration = parseInt(timerSelect.value, 10);
-      if (timerEnabled) {
-        startTimer();
-      }
-    });
-
-    soundToggle.addEventListener("change", () => {
-      soundEnabled = soundToggle.checked;
-    });
-
-    contrastToggle.addEventListener("change", () => {
-      if (contrastToggle.checked) {
-        document.body.classList.add("high-contrast");
-      } else {
-        document.body.classList.remove("high-contrast");
-      }
-    });
-
-    // ----------- Question generation per difficulty -----------
-
-    function generateQuestionByDifficulty(diff) {
-      if (diff === "easy") return generateEasyQuestion();
-      if (diff === "medium") return generateMediumQuestion();
-      if (diff === "hard") return generateHardQuestion();
-      const pick = randomChoice(["easy", "medium", "hard"]);
-      return generateQuestionByDifficulty(pick);
-    }
-
-    function generateNewQuestion() {
-      currentQuestion = generateQuestionByDifficulty(currentDifficulty);
-      equationDisplayEl.innerHTML = currentQuestion.html;
-      answerLabel.textContent = "Solve for " + currentQuestion.variable + ":";
+    } else if (e.key === "Escape") {
       answerInput.value = "";
-      answerInput.disabled = false;
-      submitBtn.disabled = false;
-      nextBtn.disabled = true;
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-      showStepsBtn.disabled = true;
-      stepsEl.style.display = "none";
-      stepsContentEl.innerHTML = "";
-      if (timerEnabled) {
-        startTimer();
-      }
-      answerInput.focus();
     }
+  });
 
-    // ----------- Answer checking -----------
+  showStepsBtn.addEventListener("click", showSteps);
+  summaryBtn.addEventListener("click", showSummary);
 
-    function parseUserAnswer(input) {
-      const trimmed = input.replace(/\s+/g, "").replace(",", ".");
-      if (trimmed === "") return null;
-      const value = parseFloat(trimmed);
-      if (!isFinite(value)) return null;
-      return value;
-    }
+  timerToggle.addEventListener("change", () => {
+    clearTimer();
+    if (!state.answered) startTimer();
+  });
 
-    function checkAnswer() {
-      if (!currentQuestion) {
-        generateNewQuestion();
-        return;
-      }
-      const userValue = parseUserAnswer(answerInput.value);
-      if (userValue === null) {
-        feedbackEl.textContent = "Please enter a number.";
-        feedbackEl.className = "feedback incorrect";
-        playBeep(250);
-        return;
-      }
-      const correctValue = currentQuestion.solution;
-      const diff = Math.abs(userValue - correctValue);
-      attempted += 1;
+  timerDuration.addEventListener("change", () => {
+    clearTimer();
+    if (!state.answered) startTimer();
+  });
 
-      if (diff < 1e-3) {
-        correct += 1;
-        score += 10;
-        streak += 1;
-        if (streak > 0 && streak % 5 === 0) {
-          score += 5;
-        }
-        if (streak > bestStreak) bestStreak = streak;
+  contrastToggle.addEventListener("change", () => {
+    document.body.classList.toggle("high-contrast", contrastToggle.checked);
+  });
 
-        feedbackEl.textContent = "Correct!";
-        feedbackEl.className = "feedback correct";
-        playBeep(880);
-        answerInput.disabled = true;
-        submitBtn.disabled = true;
-        nextBtn.disabled = false;
-        showStepsBtn.disabled = false;
-      } else {
-        streak = 0;
-        feedbackEl.textContent = "Not quite. Try again, or click 'Show steps'.";
-        feedbackEl.className = "feedback incorrect";
-        playBeep(200);
-        showStepsBtn.disabled = false;
+  document.getElementById("shapeSetSelect").addEventListener("change", loadNewProblem);
+  document.getElementById("skillSelect").addEventListener("change", loadNewProblem);
 
-        incorrectQuestions.push({
-          equationHtml: currentQuestion.html,
-          correct: correctValue,
-          variable: currentQuestion.variable
-        });
-      }
+  gameTab.addEventListener("click", () => {
+    gameTab.classList.add("active");
+    worksheetTab.classList.remove("active");
+    gameMode.style.display = "block";
+    worksheetMode.style.display = "none";
+  });
 
-      updateStats();
-    }
+  worksheetTab.addEventListener("click", () => {
+    gameTab.classList.remove("active");
+    worksheetTab.classList.add("active");
+    gameMode.style.display = "none";
+    worksheetMode.style.display = "block";
+  });
 
-    function updateStats() {
-      statAttempted.textContent = attempted;
-      statCorrect.textContent = correct;
-      const accuracy = attempted === 0 ? 0 : Math.round((correct / attempted) * 100);
-      statAccuracy.textContent = accuracy + "%";
-      statScore.textContent = score;
-      statStreak.textContent = streak;
-      statBestStreak.textContent = bestStreak;
-
-      if (incorrectListEl.style.display !== "none") {
-        renderIncorrectList();
-      }
-    }
-
-    function renderIncorrectList() {
-      incorrectListEl.innerHTML = "";
-      if (incorrectQuestions.length === 0) {
-        incorrectListEl.innerHTML = "<div>No incorrect questions yet.</div>";
-        return;
-      }
-      incorrectQuestions.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "incorrect-item";
-        div.innerHTML =
-          (index + 1) + ". " +
-          item.equationHtml +
-          " &nbsp;⇒&nbsp; " +
-          item.variable + " = " + formatNumber(item.correct, true);
-        incorrectListEl.appendChild(div);
-      });
-    }
-
-    submitBtn.addEventListener("click", checkAnswer);
-    nextBtn.addEventListener("click", () => {
-      generateNewQuestion();
+  wsGenerateButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const c = parseInt(btn.getAttribute("data-count"), 10);
+      generateWorksheet(c);
+      worksheetReveal(false);
     });
+  });
 
-    answerInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        if (!submitBtn.disabled) {
-          checkAnswer();
-        } else if (!nextBtn.disabled) {
-          generateNewQuestion();
-        }
-      } else if (e.key === "Escape") {
-        answerInput.value = "";
-      }
-    });
+  wsRevealBtn.addEventListener("click", () => worksheetReveal(true));
+  wsHideBtn.addEventListener("click", () => worksheetReveal(false));
 
-    showStepsBtn.addEventListener("click", () => {
-      if (!currentQuestion) return;
-      stepsContentEl.innerHTML = currentQuestion.stepsHtml;
-      stepsEl.style.display = "";
-    });
-
-    toggleIncorrectBtn.addEventListener("click", () => {
-      if (incorrectListEl.style.display === "none") {
-        incorrectListEl.style.display = "";
-        toggleIncorrectBtn.textContent = "Hide incorrect questions";
-        renderIncorrectList();
-      } else {
-        incorrectListEl.style.display = "none";
-        toggleIncorrectBtn.textContent = "Show incorrect questions";
-      }
-    });
-
-    // ----------- Worksheet mode logic -----------
-
-    function generateWorksheet() {
-      const count = parseInt(wsCount.value, 10);
-      const diff = wsDiff.value;
-
-      wsQuestions.innerHTML = "";
-      wsAnswers.innerHTML = "";
-      wsKeyStatus.textContent = "Hidden";
-
-      const questions = [];
-      for (let i = 0; i < count; i++) {
-        questions.push(generateQuestionByDifficulty(diff));
-      }
-
-      questions.forEach((q, index) => {
-        const qDiv = document.createElement("div");
-        qDiv.className = "worksheet-question";
-        qDiv.innerHTML = (index + 1) + ". " + q.html;
-        wsQuestions.appendChild(qDiv);
-
-        const aDiv = document.createElement("div");
-        aDiv.className = "answer-key-item";
-        aDiv.dataset.answerIndex = index;
-        aDiv.style.display = "none";
-        aDiv.innerHTML =
-          (index + 1) + ") " +
-          q.variable + " = " + formatNumber(q.solution, true);
-        wsAnswers.appendChild(aDiv);
-      });
+  // ---------- Init ----------
+  function init() {
+    if (window.location.search.indexOf("dev=1") !== -1) {
+      devPanel.style.display = "block";
+      runDevTests();
     }
+    loadNewProblem();
+  }
 
-    wsGenerateBtn.addEventListener("click", generateWorksheet);
-
-    wsShowAll.addEventListener("click", () => {
-      Array.from(wsAnswers.children).forEach(child => {
-        child.style.display = "";
-      });
-      wsKeyStatus.textContent = "Shown";
-    });
-
-    wsHideAll.addEventListener("click", () => {
-      Array.from(wsAnswers.children).forEach(child => {
-        child.style.display = "none";
-      });
-      wsKeyStatus.textContent = "Hidden";
-    });
-
-    // ----------- Dev tools -----------
-
-    function logDev(message) {
-      const now = new Date().toISOString().split("T")[1].replace("Z", "");
-      devLog.textContent += "[" + now + "] " + message + "\n";
-      devLog.scrollTop = devLog.scrollHeight;
-    }
-
-    function testGenerateMany(diff, n) {
-      let ok = 0;
-      let failures = 0;
-      for (let i = 0; i < n; i++) {
-        try {
-          const q = generateQuestionByDifficulty(diff);
-          const s = q.solution;
-          if (!isFinite(s)) {
-            failures++;
-            logDev("Invalid solution in " + diff + ": " + q.html);
-          } else {
-            ok++;
-          }
-        } catch (e) {
-          failures++;
-          logDev("Error in generation for " + diff + ": " + e.message);
-        }
-      }
-      logDev("Test " + diff + " x" + n + ": OK=" + ok + ", failures=" + failures);
-    }
-
-    function testNegativeSolutions() {
-      const diffs = ["easy", "medium", "hard"];
-      diffs.forEach(diff => {
-        let negCount = 0;
-        for (let i = 0; i < 50; i++) {
-          const q = generateQuestionByDifficulty(diff);
-          if (q.solution < 0) negCount++;
-        }
-        logDev("Negative solutions in " + diff + ": " + negCount + "/50");
-      });
-    }
-
-    function testFractionsRendering() {
-      const q = generateMediumQuestion();
-      if (q.html.indexOf("fraction") !== -1) {
-        logDev("Fraction uses HTML fraction markup: " + q.html);
-      } else {
-        logDev("No fraction found in sample medium question: " + q.html);
-      }
-    }
-
-    function testDecimalParsing() {
-      const sample = "2,5";
-      const parsed = parseUserAnswer(sample);
-      logDev("Parsing '2,5' => " + parsed);
-    }
-
-    function testNoAutoAdvance() {
-      logDev("Manual test: Solve a question correctly and verify that Next button must be used.");
-    }
-
-    function testStreakScore() {
-      attempted = 0;
-      correct = 0;
-      score = 0;
-      streak = 0;
-      bestStreak = 0;
-      updateStats();
-
-      for (let i = 0; i < 5; i++) {
-        attempted++;
-        correct++;
-        score += 10;
-        streak++;
-        if (streak > 0 && streak % 5 === 0) score += 5;
-        if (streak > bestStreak) bestStreak = streak;
-      }
-      updateStats();
-      logDev("After 5 correct in a row: score=" + score + ", streak=" + streak + ", bestStreak=" + bestStreak + " (expect 55).");
-    }
-
-    function testWorksheetMapping() {
-      wsDiff.value = "easy";
-      wsCount.value = "5";
-      generateWorksheet();
-      const qCount = wsQuestions.children.length;
-      const aCount = wsAnswers.children.length;
-      logDev("Worksheet mapping: questions=" + qCount + ", answers=" + aCount + " (should match).");
-    }
-
-    function testRandomMix() {
-      const counts = { easy: 0, medium: 0, hard: 0 };
-      for (let i = 0; i < 60; i++) {
-        const q = generateQuestionByDifficulty("random");
-        if (!q.raw || !q.raw.pattern) continue;
-        const p = q.raw.pattern;
-        if (p.indexOf("easy") === 0) counts.easy++;
-        else if (p.indexOf("medium") === 0) counts.medium++;
-        else if (p.indexOf("hard") === 0) counts.hard++;
-      }
-      logDev("Random mix (approx): " + JSON.stringify(counts));
-    }
-
-    devPanel.addEventListener("click", (e) => {
-      const btn = e.target.closest("button[data-dev-test]");
-      if (!btn) return;
-      const testName = btn.dataset.devTest;
-      if (testName === "easy100") testGenerateMany("easy", 100);
-      if (testName === "medium100") testGenerateMany("medium", 100);
-      if (testName === "hard100") testGenerateMany("hard", 100);
-      if (testName === "negatives") testNegativeSolutions();
-      if (testName === "fractions") testFractionsRendering();
-      if (testName === "decimals") testDecimalParsing();
-      if (testName === "no-auto-advance") testNoAutoAdvance();
-      if (testName === "streak") testStreakScore();
-      if (testName === "worksheet") testWorksheetMapping();
-      if (testName === "random-mix") testRandomMix();
-    });
-
-    // ----------- URL param for dev mode -----------
-
-    function initDevMode() {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("dev") === "1") {
-        devPanel.classList.add("visible");
-        logDev("Developer mode enabled.");
-      }
-    }
-
-    // ----------- Initial setup -----------
-
-    function init() {
-      soundEnabled = soundToggle.checked;
-      timerEnabled = timerToggle.checked;
-      timerDuration = parseInt(timerSelect.value, 10);
-      generateNewQuestion();
-      initDevMode();
-    }
-
-    window.addEventListener("load", init);
-  </script>
+  init();
+})();
+</script>
 </body>
 </html>
